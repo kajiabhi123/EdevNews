@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.designmodal.edevnews.DataManager.ApiClient;
 import com.example.designmodal.edevnews.DataManager.ApiInterface;
+import com.example.designmodal.edevnews.Fragment.NewsFragment;
 import com.example.designmodal.edevnews.Model.MenuModel;
 
 import java.util.List;
@@ -54,12 +55,6 @@ public class Navigation_Drawer_Main extends AppCompatActivity
 
     public void DisplayMenu()
     {
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//
-//        Menu menu =navigationView.getMenu();
-//        menu.add("one");
-//        drawerLayout.closeDrawers();
 
         ApiInterface service = ApiClient.getRetrofit().create(ApiInterface.class);
         Call<List<MenuModel>> call = service.getNewsCategory();
@@ -67,16 +62,26 @@ public class Navigation_Drawer_Main extends AppCompatActivity
         call.enqueue(new Callback<List<MenuModel>>() {
             @Override
             public void onResponse(Call<List<MenuModel>> call, Response<List<MenuModel>> response) {
-                //Log.d("onResponse", response.message());
-
                 List<MenuModel> NewsCategroyList = response.body();
                 for(int i =0; i<NewsCategroyList.size();i++)
                 {
-                    String category = NewsCategroyList.get(i).getCategory_title();
+                    final String category = NewsCategroyList.get(i).getCategory_title();
                     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                     final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                     Menu menu =navigationView.getMenu();
-                    menu.add(category);
+                    menu.add(category).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem menuItem)
+                        {
+                            Bundle bundle = new Bundle();
+                            String myCategory = category;
+                            bundle.putString("categoryParam", myCategory );
+                            NewsFragment fragInfo = new NewsFragment();
+                            fragInfo.setArguments(bundle);
+                            getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragInfo).commit();
+                            return false;
+                        }
+                    });
                     drawerLayout.closeDrawers();
 
                 }
@@ -122,26 +127,8 @@ public class Navigation_Drawer_Main extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_camera) {
-//            // Handle the camera action
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_manage) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        drawer.closeDrawer(GravityCompat.START);
+    public boolean onNavigationItemSelected(MenuItem item)
+    {
         return true;
     }
 }
