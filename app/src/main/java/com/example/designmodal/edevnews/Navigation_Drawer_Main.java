@@ -2,9 +2,8 @@ package com.example.designmodal.edevnews;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +11,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.designmodal.edevnews.DataManager.ApiClient;
+import com.example.designmodal.edevnews.DataManager.ApiInterface;
+import com.example.designmodal.edevnews.Model.MenuModel;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Navigation_Drawer_Main extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,10 +49,45 @@ public class Navigation_Drawer_Main extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        DisplayMenu();
     }
 
+    public void DisplayMenu()
+    {
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+//
+//        Menu menu =navigationView.getMenu();
+//        menu.add("one");
+//        drawerLayout.closeDrawers();
+
+        ApiInterface service = ApiClient.getRetrofit().create(ApiInterface.class);
+        Call<List<MenuModel>> call = service.getNewsCategory();
+
+        call.enqueue(new Callback<List<MenuModel>>() {
+            @Override
+            public void onResponse(Call<List<MenuModel>> call, Response<List<MenuModel>> response) {
+                //Log.d("onResponse", response.message());
+
+                List<MenuModel> NewsCategroyList = response.body();
+                for(int i =0; i<NewsCategroyList.size();i++)
+                {
+                    String category = NewsCategroyList.get(i).getCategory_title();
+                    NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                    final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    Menu menu =navigationView.getMenu();
+                    menu.add(category);
+                    drawerLayout.closeDrawers();
+
+                }
+            }
+            @Override
+            public void onFailure(Call<List<MenuModel>> call, Throwable t) {
+                Toast.makeText(Navigation_Drawer_Main.this, "Error", Toast.LENGTH_SHORT).show();
+                t.printStackTrace();
+            }
+        });
+    }
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -77,25 +123,25 @@ public class Navigation_Drawer_Main extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+//        // Handle navigation view item clicks here.
+//        int id = item.getItemId();
+//
+//        if (id == R.id.nav_camera) {
+//            // Handle the camera action
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
+//
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 }
