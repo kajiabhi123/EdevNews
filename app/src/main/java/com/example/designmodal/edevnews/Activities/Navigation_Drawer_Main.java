@@ -1,4 +1,4 @@
-package com.example.designmodal.edevnews;
+package com.example.designmodal.edevnews.Activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +18,7 @@ import com.example.designmodal.edevnews.DataManager.ApiClient;
 import com.example.designmodal.edevnews.DataManager.ApiInterface;
 import com.example.designmodal.edevnews.Fragment.NewsFragment;
 import com.example.designmodal.edevnews.Model.MenuModel;
+import com.example.designmodal.edevnews.R;
 
 import java.util.List;
 
@@ -66,6 +67,7 @@ public class Navigation_Drawer_Main extends AppCompatActivity
                 for(int i =0; i<NewsCategroyList.size();i++)
                 {
                     final String category = NewsCategroyList.get(i).getCategory_title();
+                    final String category_id = NewsCategroyList.get(i).getCategory_id();
                     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                     final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
                     Menu menu =navigationView.getMenu();
@@ -74,8 +76,7 @@ public class Navigation_Drawer_Main extends AppCompatActivity
                         public boolean onMenuItemClick(MenuItem menuItem)
                         {
                             Bundle bundle = new Bundle();
-                            String myCategory = category;
-                            bundle.putString("categoryParam", myCategory );
+                            bundle.putString("category_id_Param", category_id );
                             NewsFragment fragInfo = new NewsFragment();
                             fragInfo.setArguments(bundle);
                             getSupportFragmentManager().beginTransaction().replace(R.id.main_container,fragInfo).commit();
