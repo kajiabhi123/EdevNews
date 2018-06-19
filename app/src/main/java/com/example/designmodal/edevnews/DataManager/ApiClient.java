@@ -8,10 +8,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class ApiClient {
-
+//192.168.1.106 room
     public static final String BASE_URL = "http://192.168.1.85/EdevNewsApp/";
     private static Retrofit retrofit = null;
-
+//192.168.1.85 office
     public static Retrofit getRetrofit()
     {
         if (retrofit == null)
