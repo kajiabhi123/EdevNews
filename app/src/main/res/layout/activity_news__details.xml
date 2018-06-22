@@ -34,12 +34,10 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:contentDescription="@string/app_name"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                android:title="This is title"
                 app:layout_collapseMode="pin"
                 />
-
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
 

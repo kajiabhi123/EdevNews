@@ -23,6 +23,15 @@ public interface ApiInterface
     @POST("News.php")
     @FormUrlEncoded
     public Call<List<NewsModel>> getNews(@Field("category_id") String category);
+
+    @GET("PopularNews.php")
+    Call<List<NewsModel>> getPopularNews();
+
+    @GET("main_news.php")
+    Call<List<NewsModel>> getMainNews();
+
+    @GET("RecentNews.php")
+    Call<List<NewsModel>> getRecentNews();
 //
 //
 //    //prem's portion

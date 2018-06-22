@@ -1,9 +1,7 @@
 package com.example.designmodal.edevnews.Activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,12 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.designmodal.edevnews.DataManager.ApiClient;
 import com.example.designmodal.edevnews.DataManager.ApiInterface;
 import com.example.designmodal.edevnews.Fragment.NewsFragment;
+import com.example.designmodal.edevnews.Fragment.TabsFragment;
 import com.example.designmodal.edevnews.Model.MenuModel;
 import com.example.designmodal.edevnews.R;
 
@@ -35,21 +33,14 @@ public class Navigation_Drawer_Main extends AppCompatActivity
         setContentView(R.layout.activity_navigation__drawer__main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container,new TabsFragment()).commit();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         DisplayMenu();
     }
@@ -70,7 +61,7 @@ public class Navigation_Drawer_Main extends AppCompatActivity
                     final String category_id = NewsCategroyList.get(i).getCategory_id();
                     NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
                     final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-                    Menu menu =navigationView.getMenu();
+                    final Menu menu =navigationView.getMenu();
                     menu.add(category).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                         @Override
                         public boolean onMenuItemClick(MenuItem menuItem)
@@ -130,6 +121,19 @@ public class Navigation_Drawer_Main extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item)
     {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home)
+        {
+            // openFragment(new RecycleView_job(),"Jobs");
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new TabsFragment()).commit();
+            //this.getSupportActionBar().setTitle("Home");
+            // Handle the camera action
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 }

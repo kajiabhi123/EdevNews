@@ -16,6 +16,10 @@ import com.example.designmodal.edevnews.Model.NewsModel;
 import com.example.designmodal.edevnews.R;
 import com.squareup.picasso.Picasso;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +31,7 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
 
     Context context;
     private List<NewsModel> item;
+    String news_time;
 
     public NewsRvAdapter(Context context, List<NewsModel> item)
     {
@@ -35,7 +40,8 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
     }
 
     @Override
-    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         View layoutView = LayoutInflater.from(context).inflate(R.layout.news_feeds, parent, false);
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(layoutView);
 
@@ -51,10 +57,79 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
         String imageName = item.get(position).getNews_image();
         final String ImageUrl = ApiClient.BASE_URL+"uploads/"+imageName;
 
+
+         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        //return number of milliseconds since January 1, 1970, 00:00:00 GMT
+        long current_time = timestamp.getTime();
+        //Date current = new Date();
+        try {
+            SimpleDateFormat yourStandardDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date Publish_Date = yourStandardDateFormat.parse(news_date);
+            //date1 = dates.parse(CurrentDate);
+
+            // Comparing dates
+            long difference = Math.abs(current_time-(Publish_Date.getTime()));
+            long diff_in_sec = (difference/1000);
+            long diff_in_minutes = (difference/60000);
+            long diff_in_hours = (difference/3600000);
+            long diff_in_days = (difference/86400000);
+            //long diff_in_years =  (difference/(31536000));
+
+
+            Toast.makeText(context, diff_in_days+"", Toast.LENGTH_SHORT).show();
+
+
+
+
+//            long secondsInMilli = 1000;
+//            long minutesInMilli = secondsInMilli*60;
+//            long hoursInMilli = minutesInMilli* 60;
+//            long daysInMilli = hoursInMilli*24;
+//            long elapsedDays = difference/daysInMilli;
+//
+//            //long seconds = diff_in_sec
+//
+//            difference = difference % daysInMilli;
+//
+//            long elapsedHours = difference/hoursInMilli;
+//            difference = difference % hoursInMilli;
+//
+//            long elapsedMinutes = difference/minutesInMilli;
+//            difference = difference % minutesInMilli;
+//
+//            long elapsedSeconds = difference/secondsInMilli;
+
+            if (diff_in_sec<=60)
+            {
+                news_time ="Just Now";
+
+            } else if (diff_in_minutes <(60))
+            {
+                news_time = diff_in_minutes +" "+"Minutes Ago";
+
+            }
+            else if (diff_in_hours <(24))
+            {
+                news_time = diff_in_hours+ ""+"Hours Ago";
+
+
+            }
+            else if (diff_in_days>=1)
+            {
+                news_time = diff_in_days +""+" Days Ago";
+            }
+            holder.dateView.setText(news_time);
+        }
+        catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+
         YoYo.with(Techniques.FadeIn).playOn(holder.cardView);
         holder.titleView.setText(news_title);
         holder.descriptionView.setText(news_description);
-        holder.dateView.setText(news_date);
+        //holder.dateView.setText(minutes1+"");
         Picasso.with(context).load(ImageUrl).into(holder.newsImg);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
