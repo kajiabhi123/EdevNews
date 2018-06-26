@@ -70,7 +70,6 @@ public class NewsFragment extends Fragment
                 @Override
                 public void onResponse(Call<List<NewsModel>> call, Response<List<NewsModel>> response) {
                     //Log.d("onResponse", response.message());
-
                     List<NewsModel> NewsList = response.body();
                     //layoutManager = new LinearLayoutManager(MainActivity.this);
                     NewsRvAdapter newsRvAdapter = new NewsRvAdapter(getContext(),NewsList);

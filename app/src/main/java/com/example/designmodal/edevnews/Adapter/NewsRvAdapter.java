@@ -32,7 +32,6 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
     Context context;
     private List<NewsModel> item;
     String news_time;
-
     public NewsRvAdapter(Context context, List<NewsModel> item)
     {
         this.context = context;
@@ -57,7 +56,6 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
         String imageName = item.get(position).getNews_image();
         final String ImageUrl = ApiClient.BASE_URL+"uploads/"+imageName;
 
-
          Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         //return number of milliseconds since January 1, 1970, 00:00:00 GMT
         long current_time = timestamp.getTime();
@@ -79,26 +77,6 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
             Toast.makeText(context, diff_in_days+"", Toast.LENGTH_SHORT).show();
 
 
-
-
-//            long secondsInMilli = 1000;
-//            long minutesInMilli = secondsInMilli*60;
-//            long hoursInMilli = minutesInMilli* 60;
-//            long daysInMilli = hoursInMilli*24;
-//            long elapsedDays = difference/daysInMilli;
-//
-//            //long seconds = diff_in_sec
-//
-//            difference = difference % daysInMilli;
-//
-//            long elapsedHours = difference/hoursInMilli;
-//            difference = difference % hoursInMilli;
-//
-//            long elapsedMinutes = difference/minutesInMilli;
-//            difference = difference % minutesInMilli;
-//
-//            long elapsedSeconds = difference/secondsInMilli;
-
             if (diff_in_sec<=60)
             {
                 news_time ="Just Now";
@@ -110,7 +88,7 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
             }
             else if (diff_in_hours <(24))
             {
-                news_time = diff_in_hours+ ""+"Hours Ago";
+                news_time = diff_in_hours+ " "+"Hours Ago";
 
 
             }
@@ -133,7 +111,9 @@ public class NewsRvAdapter extends RecyclerView.Adapter<RecyclerViewHolder>
         Picasso.with(context).load(ImageUrl).into(holder.newsImg);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+
                 Toast.makeText(context, ImageUrl, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, News_Details.class);
                 intent.putExtra("date",news_date);

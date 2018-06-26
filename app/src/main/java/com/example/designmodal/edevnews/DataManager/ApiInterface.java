@@ -1,5 +1,6 @@
 package com.example.designmodal.edevnews.DataManager;
 
+import com.example.designmodal.edevnews.Model.AdsModel;
 import com.example.designmodal.edevnews.Model.MenuModel;
 import com.example.designmodal.edevnews.Model.NewsModel;
 
@@ -32,6 +33,9 @@ public interface ApiInterface
 
     @GET("RecentNews.php")
     Call<List<NewsModel>> getRecentNews();
+
+    @GET("Ads.php")
+    Call<List<AdsModel>> getAds();
 //
 //
 //    //prem's portion
